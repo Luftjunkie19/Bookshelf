@@ -16,9 +16,31 @@ const form = document.querySelector(".form");
 const formHeader = document.querySelector(".form-header");
 const currentBooksHolder = document.querySelector(".current-books");
 const infoTag = document.querySelector(".info-tag");
+const currentStatusTag = document.querySelector(".status-current");
+const bookshelfedInfo = document.querySelector(".bookshelf-info");
 
 let myShelf = [];
 let currentBooks = [];
+
+function showCurrentArrayState() {
+  if (currentBooks.length === 0) {
+    currentStatusTag.innerText = `Oh 😥, you don't read anything. Maybe you will start?`;
+  } else {
+    currentStatusTag.innerText = `Nice 😎, you read currently ${
+      currentBooks.length
+    } ${currentBooks.length < 2 ? "Book" : "Books"}. Keep it up!`;
+  }
+}
+
+function showBookshelfedInfo() {
+  if (myShelf.length === 0) {
+    bookshelfedInfo.innerText = `Your bookshelf is empty 😥, will you fill it anywhen?`;
+  } else {
+    bookshelfedInfo.innerText = `Nice 😎, your bookshelf has already ${
+      myShelf.length
+    } ${myShelf.length < 2 ? "Book" : "Books"}. Keep it up!`;
+  }
+}
 
 function showShelfedBooks() {
   let input = "";
@@ -96,7 +118,7 @@ function clearFields() {
   titleInput.value = "";
   authorInput.value = "";
   pagesInput.value = 1;
-  readPagesInput.value = 1;
+  readPagesInput.value = 0;
   coverPreviewHolder.innerHTML = "";
   selectStatusState.value = "";
 }
@@ -134,6 +156,9 @@ function addNewBook(e) {
     showShelfedBooks();
 
     closeModalForm();
+
+    showBookshelfedInfo();
+    showCurrentBooks();
   }
 }
 
@@ -162,6 +187,9 @@ function deleteOrEdit(e) {
     submitBtn.classList.add("btn-submit");
     submitBtn.innerText = "Submit";
     form.removeAttribute("data-index");
+
+    showCurrentArrayState();
+    showBookshelfedInfo();
   }
 
   if (e.target.classList.contains("close-book-btn")) {
@@ -177,16 +205,16 @@ function deleteOrEdit(e) {
 
     updateCurrentBookIndexes();
     setCurrentLocalStorage();
+
+    showCurrentArrayState();
+    showBookshelfedInfo();
   }
 }
 
 function editCurrentBook(e) {
   if (e.target.classList.contains("edit-book")) {
     const index = +e.target.parentElement.getAttribute("data-index");
-    const src =
-      e.target.parentElement.children[2].children[0].children[0].children[0]
-        .src;
-    console.log(src);
+    const src = currentBooks[index].img;
 
     console.log(currentBooks[index]);
 
@@ -197,7 +225,7 @@ function editCurrentBook(e) {
     readPagesInput.value = currentBooks[index].read;
     selectStatusState.value = currentBooks[index].state;
     formHeader.innerText = "Missclicked? No worries you can edit it😉";
-    infoTag.innerText = `I apoligize, the project is not over, upload again the file please`;
+    infoTag.innerText = `I apoligize😥, the project is not over, upload again the file please.`;
 
     submitBtn.classList.remove("btn-submit");
     submitBtn.classList.add("edit");
@@ -239,6 +267,8 @@ function addBookToCurrent(e) {
     console.log(currentBooks);
 
     showShelfedBooks();
+    showCurrentArrayState();
+    showBookshelfedInfo();
   }
 }
 
@@ -252,3 +282,6 @@ form.addEventListener("click", addNewBook);
 formOpenBtn.addEventListener("click", openModalForm);
 formCloseBtn.addEventListener("click", closeModalForm);
 document.body.addEventListener("click", deleteOrEdit);
+
+showBookshelfedInfo();
+showCurrentArrayState();
