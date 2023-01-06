@@ -1,0 +1,277 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Montserrat", "sans-serif";
+  color: white;
+}
+
+.navbar {
+  background-color: rgb(22, 136, 249);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.logo h2 {
+  font-size: 42px;
+}
+
+.logo-control {
+  width: 100px;
+  height: 100px;
+  padding: 15px;
+}
+
+.logo-control img {
+  width: 100%;
+  height: 100%;
+}
+
+.quote {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.container {
+  height: calc(100vh - 120px);
+  background-color: rgb(46, 46, 46);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+}
+
+.current-books {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.book-cover {
+  height: 100px;
+  width: 100px;
+}
+
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.current-book {
+  background-color: rgb(100, 100, 223);
+  padding: 25px;
+  border-radius: 5px;
+  position: relative;
+  top: 0;
+  left: 0;
+  margin: 10px;
+}
+
+.book-infos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+button {
+  border: none;
+  background-color: azure;
+  font-family: "Montserrat", "sans-serif";
+  font-size: 12px;
+  padding: 5px;
+}
+
+.form-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(45, 44, 44, 0.663);
+  width: 100%;
+  height: 100vh;
+}
+
+.choose-the-book {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(45, 44, 44, 0.663);
+  width: 100%;
+  height: 100vh;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  background-color: blue;
+  padding: 30px;
+  border-radius: 5px;
+}
+
+input[type="text"],
+input[type="number"] {
+  font-family: inherit;
+  padding: 10px;
+  border: none;
+  border-bottom: 2px solid;
+  background: none;
+  color: white;
+}
+
+.btn-stop {
+  display: none;
+}
+
+input[type="text"]:focus,
+input[type="number"] {
+  background-color: none;
+  outline: none;
+}
+
+input[type="text"]::placeholder {
+  color: white;
+}
+
+.btn {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.btn.add-book-btn {
+  padding: 5px;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+.btn-submit,
+.edit {
+  background-color: cornflowerblue;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.form-field,
+.book-field {
+  padding: 10px;
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-state {
+  color: white;
+  background-color: black;
+  outline: none;
+  border: none;
+  padding: 10px;
+  font-family: inherit;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+  padding: 10px;
+  background-color: rgb(238, 34, 34);
+  color: aliceblue;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.close-book-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgb(238, 34, 34);
+  color: aliceblue;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.btn.edit-book {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 7px;
+}
+
+.fas.fa-close,
+.fas.fa-pen {
+  margin: 5px;
+}
+
+.fas.fa-plus.fa-2x {
+  margin: 5px;
+}
+
+.fas.fa-pen {
+  font-size: 14px;
+}
+
+.bookshelf {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.saved-book {
+  position: relative;
+  top: 0;
+  left: 0;
+  background-color: rgb(41, 100, 249);
+  padding: 20px;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.btn.add-reading {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+  border-radius: 50%;
+}
+
+.book-cover-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.book-cover-preview img {
+  width: 100%;
+  height: 100%;
+}
