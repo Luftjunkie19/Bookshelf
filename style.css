@@ -91,6 +91,7 @@ button {
   font-family: "Montserrat", "sans-serif";
   font-size: 12px;
   padding: 5px;
+  cursor: pointer;
 }
 
 .form-container {

@@ -1,7 +1,7 @@
+import Book from './scripts/Book.js';
+
 export const bookShelf = document.querySelector(".bookshelf");
 const formOpenBtn = document.querySelector(".btn.add-book-btn");
-const editBtn = document.querySelector(".btn.edit-book");
-const removeBookBtn = document.querySelector(".btn.close-book-btn");
 const formCloseBtn = document.querySelector(".btn.close-btn");
 const titleInput = document.querySelector("#title");
 const authorInput = document.querySelector("#author");
@@ -12,34 +12,75 @@ const selectStatusState = document.querySelector(".status-state");
 const submitBtn = document.querySelector(".btn.btn-submit");
 const formContainer = document.querySelector(".form-container");
 const coverPreviewHolder = document.querySelector(".book-cover-preview");
-const chooseBookContainer = document.querySelector(".choose-the-book");
-const bookContainer = document.querySelector(".book-container");
 const form = document.querySelector(".form");
+const formHeader = document.querySelector(".form-header");
 const currentBooksHolder = document.querySelector(".current-books");
-const drawBtn = document.querySelector(".btn.draw");
-const stopBtn = document.querySelector(".btn-stop");
-const editTitle = document.querySelector(".form-header");
+const infoTag = document.querySelector(".info-tag");
 
-function removeBook(e) {
-  if (e.target.classList.contains("close-btn")) {
-    const currentBookElement = e.target.parentElement;
+let myShelf = [];
+let currentBooks = [];
 
-    currentBookElement.remove();
+function showShelfedBooks() {
+  let input = "";
+  myShelf.forEach((book, index) => {
+    input += `${Book.addBookToDOM(book, index)}`;
+  });
+  bookShelf.innerHTML = input;
+}
+
+function setShelfedLocalStorage() {
+  localStorage.setItem("bookshelfed", JSON.stringify(myShelf));
+}
+
+function loadShelfedLocalStorage() {
+  if (localStorage.getItem("bookshelfed") === null) {
+    myShelf = [];
+  } else {
+    myShelf = JSON.parse(localStorage.getItem("bookshelfed"));
+
+    showShelfedBooks();
   }
 }
 
-function clearFields() {
-  titleInput.value = "";
-  authorInput.value = "";
-  pagesInput.value = 0;
-  readPagesInput.value = 0;
-  selectStatusState.value = "";
+function setCurrentLocalStorage() {
+  localStorage.setItem("current", JSON.stringify(currentBooks));
 }
 
-function checkIfValid() {
-  if (+pagesInput.value < +readPagesInput.value) {
-    return;
+function getCurrentLocalStorage() {
+  if (localStorage.getItem("current") === null) {
+    currentBooks = [];
+  } else {
+    currentBooks = JSON.parse(localStorage.getItem("current"));
+    showCurrentBooks();
   }
+}
+
+loadShelfedLocalStorage();
+getCurrentLocalStorage();
+
+function updateBookIndexes() {
+  const savedBooks = document.querySelectorAll(".saved-book");
+
+  savedBooks.forEach((book, index) => {
+    book.setAttribute("data-index", index);
+  });
+}
+
+function updateCurrentBookIndexes() {
+  const currentBooks = document.querySelectorAll(".current-book");
+
+  currentBooks.forEach((book, i) => {
+    book.setAttribute("data-index", i);
+  });
+}
+
+function showCurrentBooks() {
+  let input = "";
+
+  currentBooks.forEach((book, index) => {
+    input += Book.addToCurrentBook(book, index);
+  });
+  currentBooksHolder.innerHTML = input;
 }
 
 function openModalForm() {
@@ -49,6 +90,122 @@ function openModalForm() {
 function closeModalForm() {
   clearFields();
   formContainer.style.display = "none";
+}
+
+function clearFields() {
+  titleInput.value = "";
+  authorInput.value = "";
+  pagesInput.value = 1;
+  readPagesInput.value = 1;
+  coverPreviewHolder.innerHTML = "";
+  selectStatusState.value = "";
+}
+
+function checkIfValid() {
+  if (+pagesInput.value < +readPagesInput.value) {
+    return;
+  }
+}
+
+function addNewBook(e) {
+  if (e.target.classList.contains("btn-submit")) {
+    checkIfValid();
+
+    const newShelfedBook = new Book(
+      titleInput.value,
+      authorInput.value,
+      +pagesInput.value,
+      +readPagesInput.value,
+      selectStatusState.value,
+      coverPreviewHolder.children[0]?.src,
+      `${
+        new Date().getDate() < 10
+          ? "0" + new Date().getDate()
+          : new Date().getDate()
+      }.${
+        new Date().getMonth() + 1 < 10
+          ? `0${new Date().getMonth() + 1}`
+          : new Date().getMonth() + 1
+      }.${new Date().getFullYear()}`
+    );
+
+    myShelf.push(newShelfedBook);
+    setShelfedLocalStorage();
+    showShelfedBooks();
+
+    closeModalForm();
+  }
+}
+
+function deleteOrEdit(e) {
+  if (e.target.classList.contains("edit")) {
+    const index = form.getAttribute("changed-index");
+
+    checkIfValid();
+    const editedBook = new Book(
+      titleInput.value,
+      authorInput.value,
+      +pagesInput.value,
+      +readPagesInput.value,
+      selectStatusState.value,
+      coverPreviewHolder.children[0]?.src,
+      currentBooks[index].date
+    );
+
+    currentBooks.splice(index, 1, editedBook);
+    showCurrentBooks();
+    setCurrentLocalStorage();
+
+    closeModalForm();
+
+    submitBtn.classList.remove("edit");
+    submitBtn.classList.add("btn-submit");
+    submitBtn.innerText = "Submit";
+    form.removeAttribute("data-index");
+  }
+
+  if (e.target.classList.contains("close-book-btn")) {
+    const index = +e.target.parentElement.getAttribute("data-index");
+
+    const currentBookEl = e.target.parentElement;
+
+    currentBookEl.remove();
+
+    currentBooks.splice(index, 1);
+
+    console.log(currentBooks);
+
+    updateCurrentBookIndexes();
+    setCurrentLocalStorage();
+  }
+}
+
+function editCurrentBook(e) {
+  if (e.target.classList.contains("edit-book")) {
+    const index = +e.target.parentElement.getAttribute("data-index");
+    const src =
+      e.target.parentElement.children[2].children[0].children[0].children[0]
+        .src;
+    console.log(src);
+
+    console.log(currentBooks[index]);
+
+    titleInput.value = currentBooks[index].title;
+    authorInput.value = currentBooks[index].author;
+    pagesInput.value = currentBooks[index].pages;
+    coverPreviewHolder.innerHTML = `<img src=${src}/>`;
+    readPagesInput.value = currentBooks[index].read;
+    selectStatusState.value = currentBooks[index].state;
+    formHeader.innerText = "Missclicked? No worries you can edit it😉";
+    infoTag.innerText = `I apoligize, the project is not over, upload again the file please`;
+
+    submitBtn.classList.remove("btn-submit");
+    submitBtn.classList.add("edit");
+    submitBtn.innerText = "Edit";
+    form.setAttribute("changed-index", index);
+
+    openModalForm();
+  }
 }
 
 function handleFiles(file, holder) {
@@ -65,46 +222,33 @@ function handleFiles(file, holder) {
   reader.readAsDataURL(file.files[0]);
 }
 
-/* 
-    div.innerHTML = `
-    <button class="btn edit-book">Edit <i class="fas fa-pen"></i></button>
+function addBookToCurrent(e) {
+  if (e.target.classList.contains("add-reading")) {
+    let index = +e.target.parentElement.getAttribute("data-index");
+    console.log(index);
 
-          <button class="btn close-book-btn">
-            Remove <i class="fas fa-remove"></i>
-          </button>
+    currentBooks.push(myShelf[index]);
+    setCurrentLocalStorage();
+    showCurrentBooks();
 
-          <div class="book-infos">
-            <div class="book-field">
-              <div class="book-cover">
-                <img src="${
-                  chosenElement.img === undefined
-                    ? "./assets/2232688.png"
-                    : chosenElement.img
-                }" alt="" />
-              </div>
-            </div>
+    myShelf.splice(index, 1);
+    setShelfedLocalStorage();
+    updateBookIndexes();
 
-            <div class="book-field">
-              <h4 class="title">${chosenElement.title}</h4>
-            </div>
-            <div class="book-field">
-              <h5 class="author">${chosenElement.author}</h5>
-            </div>
-            <div class="book-field">
-              <p class="pages">${chosenElement.pages} pages</p>
-            </div>
+    console.log(myShelf);
+    console.log(currentBooks);
 
-            <div class="book-field">
-              <p class="read-pages">Already read: ${chosenElement.read}/${
-      chosenElement.pages
-    }</p>
-            </div>
+    showShelfedBooks();
+  }
+}
 
-            <h5 class="status">Status: ${
-              chosenElement.status
-            }, ${new Date().getDate()}/${
-      new Date().getMonth() + 1
-    }/${new Date().getFullYear()}</h5>
-          </div>
-        </div>`;
-        */
+bookShelf.addEventListener("click", addBookToCurrent);
+coverFileInput.addEventListener("change", () => {
+  coverPreviewHolder.innerHTML = "";
+  handleFiles(coverFileInput, coverPreviewHolder);
+});
+currentBooksHolder.addEventListener("click", editCurrentBook);
+form.addEventListener("click", addNewBook);
+formOpenBtn.addEventListener("click", openModalForm);
+formCloseBtn.addEventListener("click", closeModalForm);
+document.body.addEventListener("click", deleteOrEdit);

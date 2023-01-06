@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Book Project</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -47,7 +47,7 @@
 
         <div class="form">
           <h2 class="form-header">Add New Book to your shelf!</h2>
-          <p>And of course enjoy the development😉</p>
+          <p clas="add-form-p">And of course enjoy the development😉</p>
 
           <div class="form-field">
             <label for="title">Title:</label>
@@ -81,8 +81,8 @@
               id="pages"
               placeholder="Enter pages"
               autocomplete="off"
-              min="0"
-              value="0"
+              min="1"
+              value="1"
               required
             />
           </div>
@@ -107,7 +107,7 @@
               name="status-state"
               id="status-state"
               class="status-state"
-              value="UNTOUCHED"
+              value="untouched"
               required
             >
               <option value="untouched">untouched</option>
@@ -121,6 +121,7 @@
             <input type="file" name="cover" id="cover" />
 
             <div class="book-cover-preview"></div>
+            <small class="info-tag"></small>
           </div>
 
           <div class="button-group">
@@ -130,6 +131,6 @@
       </div>
     </div>
 
-    <script src="script.js" type="module"></script>
+    <script src="./script.js" type="module"></script>
   </body>
 </html>
