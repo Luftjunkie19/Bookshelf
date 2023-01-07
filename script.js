@@ -164,7 +164,8 @@ function addNewBook(e) {
 
 function deleteOrEdit(e) {
   if (e.target.classList.contains("edit")) {
-    const index = form.getAttribute("changed-index");
+    const index = +form.getAttribute("changed-index");
+    console.log(index);
 
     checkIfValid();
     const editedBook = new Book(
@@ -179,6 +180,7 @@ function deleteOrEdit(e) {
 
     currentBooks.splice(index, 1, editedBook);
     showCurrentBooks();
+    updateColor(index);
     setCurrentLocalStorage();
 
     closeModalForm();
@@ -208,6 +210,20 @@ function deleteOrEdit(e) {
 
     showCurrentArrayState();
     showBookshelfedInfo();
+  }
+}
+
+function updateColor(index) {
+  const currentBooksEl = document.querySelectorAll(".current-book");
+
+  if (currentBooks[index].state === "untouched") {
+    currentBooksEl[index].classList.add("untouched");
+  } else if (currentBooks[index].state === "reading") {
+    currentBooksEl[index].classList.remove("untouched");
+    currentBooksEl[index].classList.add("reading");
+  } else {
+    currentBooksEl[index].classList.remove("reading");
+    currentBooksEl[index].classList.add("finished");
   }
 }
 

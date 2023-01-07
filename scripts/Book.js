@@ -32,9 +32,9 @@ export default class Book {
   }
 
   static addToCurrentBook(book, index) {
-    const div = `<div class="current-book" data-index=${index} data-src=${
-      book.img
-    }>
+    const div = `<div class="current-book ${
+      book.state
+    }" data-index=${index} data-src=${book.img}>
 
 <button class="btn edit-book">Edit <i class="fas fa-pen"></i></button>
 
