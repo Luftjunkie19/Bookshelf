@@ -189,6 +189,8 @@ function deleteOrEdit(e) {
     submitBtn.classList.add("btn-submit");
     submitBtn.innerText = "Submit";
     form.removeAttribute("data-index");
+    formHeader.innerText = "Missclicked? No worries you can edit it😉";
+    infoTag.innerText = `Add New Book to your shelf!`;
 
     showCurrentArrayState();
     showBookshelfedInfo();
