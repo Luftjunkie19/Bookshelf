@@ -65,14 +65,14 @@ export default class Book {
               <p class="read-pages">Already read: ${book.read}/${book.pages}</p>
             </div>
 
-            <h5 class="status">Status: ${book.state},  ${
-      new Date().getMonth() + 1 < 10
-        ? `0${new Date().getMonth() + 1}`
-        : new Date().getMonth() + 1
-    }.${
+            <h5 class="status">Status: ${book.state}, ${
       new Date().getDate() < 10
         ? "0" + new Date().getDate()
         : new Date().getDate()
+    }.${
+      new Date().getMonth() + 1 < 10
+        ? `0${new Date().getMonth() + 1}`
+        : new Date().getMonth() + 1
     }.${new Date().getFullYear()}</h5>
           </div>
         </div>
