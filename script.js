@@ -120,11 +120,15 @@ function clearFields() {
   pagesInput.value = 1;
   readPagesInput.value = 0;
   coverPreviewHolder.innerHTML = "";
-  selectStatusState.value = "";
+  selectStatusState.value = "untouched";
 }
 
 function checkIfValid() {
-  if (+pagesInput.value < +readPagesInput.value) {
+  if (
+    (+pagesInput.value < +readPagesInput.value && titleInput.value === "") ||
+    authorInput.value === ""
+  ) {
+    alert("You missed something 😉");
     return;
   }
 }
