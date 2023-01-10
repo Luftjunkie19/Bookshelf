@@ -119,6 +119,7 @@ function clearFields() {
   authorInput.value = "";
   pagesInput.value = 1;
   readPagesInput.value = 0;
+  coverFileInput.value = "";
   coverPreviewHolder.innerHTML = "";
   selectStatusState.value = "untouched";
 }
