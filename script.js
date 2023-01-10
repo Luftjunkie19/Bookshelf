@@ -126,8 +126,8 @@ function clearFields() {
 
 function checkIfValid() {
   if (
-    (+pagesInput.value < +readPagesInput.value && titleInput.value === "") ||
-    authorInput.value === ""
+    +pagesInput.value < +readPagesInput.value &&
+    (titleInput.value === "" || authorInput.value === "")
   ) {
     alert("You missed something 😉");
     return;
