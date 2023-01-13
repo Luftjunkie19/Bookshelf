@@ -18,6 +18,8 @@ const currentBooksHolder = document.querySelector(".current-books");
 const infoTag = document.querySelector(".info-tag");
 const currentStatusTag = document.querySelector(".status-current");
 const bookshelfedInfo = document.querySelector(".bookshelf-info");
+const errorContainer = document.querySelector(".error-container");
+const successContainer = document.querySelector(".success-container");
 
 let myShelf = [];
 let currentBooks = [];
@@ -124,46 +126,64 @@ function clearFields() {
   selectStatusState.value = "untouched";
 }
 
-function checkIfValid() {
-  if (
-    +pagesInput.value < +readPagesInput.value &&
-    (titleInput.value === "" || authorInput.value === "")
-  ) {
-    alert("You missed something 😉");
-    return;
-  }
+function showError(text) {
+  errorContainer.innerHTML = `<p>${text}</p>`;
+  errorContainer.style.transform = `translateX(0)`;
+  setTimeout(() => {
+    setTimeout(() => {
+      errorContainer.innerHTML = ``;
+    }, 500);
+    errorContainer.style.transform = `translateX(100%)`;
+  }, 3000);
+}
+
+function showSuccess(text) {
+  successContainer.innerHTML = `<p>${text}</p>`;
+  successContainer.style.transform = `translateX(0)`;
+
+  setTimeout(() => {
+    setTimeout(() => {
+      successContainer.innerHTML = ``;
+    }, 500);
+    successContainer.style.transform = `translateX(100%)`;
+  }, 3000);
 }
 
 function addNewBook(e) {
   if (e.target.classList.contains("btn-submit")) {
-    checkIfValid();
+    if (+pagesInput.value < +readPagesInput.value) {
+      showError(`You cannot read more pages than the book has 😉`);
+    } else if (titleInput.value === "" || authorInput.value === "") {
+      showError("You left some fields empty😅");
+    } else {
+      const newShelfedBook = new Book(
+        titleInput.value,
+        authorInput.value,
+        +pagesInput.value,
+        +readPagesInput.value,
+        selectStatusState.value,
+        coverPreviewHolder.children[0]?.src,
+        `${
+          new Date().getDate() < 10
+            ? "0" + new Date().getDate()
+            : new Date().getDate()
+        }.${
+          new Date().getMonth() + 1 < 10
+            ? `0${new Date().getMonth() + 1}`
+            : new Date().getMonth() + 1
+        }.${new Date().getFullYear()}`
+      );
 
-    const newShelfedBook = new Book(
-      titleInput.value,
-      authorInput.value,
-      +pagesInput.value,
-      +readPagesInput.value,
-      selectStatusState.value,
-      coverPreviewHolder.children[0]?.src,
-      `${
-        new Date().getDate() < 10
-          ? "0" + new Date().getDate()
-          : new Date().getDate()
-      }.${
-        new Date().getMonth() + 1 < 10
-          ? `0${new Date().getMonth() + 1}`
-          : new Date().getMonth() + 1
-      }.${new Date().getFullYear()}`
-    );
+      myShelf.push(newShelfedBook);
+      setShelfedLocalStorage();
+      showShelfedBooks();
+      showSuccess("Book succesfully bookshelfed 😄!");
 
-    myShelf.push(newShelfedBook);
-    setShelfedLocalStorage();
-    showShelfedBooks();
+      closeModalForm();
 
-    closeModalForm();
-
-    showBookshelfedInfo();
-    showCurrentBooks();
+      showBookshelfedInfo();
+      showCurrentBooks();
+    }
   }
 }
 
@@ -172,33 +192,39 @@ function deleteOrEdit(e) {
     const index = +form.getAttribute("changed-index");
     console.log(index);
 
-    checkIfValid();
-    const editedBook = new Book(
-      titleInput.value,
-      authorInput.value,
-      +pagesInput.value,
-      +readPagesInput.value,
-      selectStatusState.value,
-      coverPreviewHolder.children[0]?.src,
-      currentBooks[index].date
-    );
+    if (+pagesInput.value < +readPagesInput.value) {
+      showError(`You cannot read more pages than the book has 😉`);
+    } else if (titleInput.value === "" || authorInput.value === "") {
+      showError("You left some fields empty😅");
+    } else {
+      const editedBook = new Book(
+        titleInput.value,
+        authorInput.value,
+        +pagesInput.value,
+        +readPagesInput.value,
+        selectStatusState.value,
+        coverPreviewHolder.children[0]?.src,
+        currentBooks[index].date
+      );
 
-    currentBooks.splice(index, 1, editedBook);
-    showCurrentBooks();
-    updateColor(index);
-    setCurrentLocalStorage();
+      currentBooks.splice(index, 1, editedBook);
+      showCurrentBooks();
+      updateColor(index);
+      setCurrentLocalStorage();
 
-    closeModalForm();
+      showSuccess("Book successfully edited 😄!");
+      closeModalForm();
 
-    submitBtn.classList.remove("edit");
-    submitBtn.classList.add("btn-submit");
-    submitBtn.innerText = "Submit";
-    form.removeAttribute("data-index");
-    formHeader.innerText = "Missclicked? No worries you can edit it😉";
-    infoTag.innerText = `Add New Book to your shelf!`;
+      submitBtn.classList.remove("edit");
+      submitBtn.classList.add("btn-submit");
+      submitBtn.innerText = "Submit";
+      form.removeAttribute("data-index");
+      formHeader.innerText = "Missclicked? No worries you can edit it😉";
+      infoTag.innerText = `Add New Book to your shelf!`;
 
-    showCurrentArrayState();
-    showBookshelfedInfo();
+      showCurrentArrayState();
+      showBookshelfedInfo();
+    }
   }
 
   if (e.target.classList.contains("close-book-btn")) {
@@ -214,6 +240,8 @@ function deleteOrEdit(e) {
 
     updateCurrentBookIndexes();
     setCurrentLocalStorage();
+
+    showSuccess("Book successfully removed 😎!");
 
     showCurrentArrayState();
     showBookshelfedInfo();
@@ -288,6 +316,8 @@ function addBookToCurrent(e) {
 
     console.log(myShelf);
     console.log(currentBooks);
+
+    showSuccess("New Current Book in a city 😮!");
 
     showShelfedBooks();
     showCurrentArrayState();
