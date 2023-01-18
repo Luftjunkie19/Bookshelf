@@ -15,7 +15,6 @@ const coverPreviewHolder = document.querySelector(".book-cover-preview");
 const form = document.querySelector(".form");
 const formHeader = document.querySelector(".form-header");
 const currentBooksHolder = document.querySelector(".current-books");
-const infoTag = document.querySelector(".info-tag");
 const currentStatusTag = document.querySelector(".status-current");
 const bookshelfedInfo = document.querySelector(".bookshelf-info");
 const errorContainer = document.querySelector(".error-container");
@@ -276,7 +275,6 @@ function editCurrentBook(e) {
     readPagesInput.value = currentBooks[index].read;
     selectStatusState.value = currentBooks[index].state;
     formHeader.innerText = "Missclicked? No worries you can edit it😉";
-    infoTag.innerText = `I apoligize😥, the project is not over, upload again the file please.`;
 
     submitBtn.classList.remove("btn-submit");
     submitBtn.classList.add("edit");
