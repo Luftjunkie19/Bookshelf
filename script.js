@@ -219,8 +219,6 @@ function deleteOrEdit(e) {
       submitBtn.classList.add("btn-submit");
       submitBtn.innerText = "Submit";
       form.removeAttribute("data-index");
-      formHeader.innerText = "Missclicked? No worries you can edit it😉";
-      infoTag.innerText = `Add New Book to your shelf!`;
 
       showCurrentArrayState();
       showBookshelfedInfo();
@@ -265,14 +263,16 @@ function updateColor(index) {
 function editCurrentBook(e) {
   if (e.target.classList.contains("edit-book")) {
     const index = +e.target.parentElement.getAttribute("data-index");
-    const src = currentBooks[index].img;
+    const src =
+      e.target.parentElement.children[2].children[0].children[0].children[0]
+        .src;
 
-    console.log(currentBooks[index]);
+    console.log(src);
 
     titleInput.value = currentBooks[index].title;
     authorInput.value = currentBooks[index].author;
     pagesInput.value = currentBooks[index].pages;
-    coverPreviewHolder.innerHTML = `<img src=${src}/>`;
+    coverPreviewHolder.innerHTML = `<img src="${src}"/>`;
     readPagesInput.value = currentBooks[index].read;
     selectStatusState.value = currentBooks[index].state;
     formHeader.innerText = "Missclicked? No worries you can edit it😉";
@@ -332,7 +332,11 @@ coverFileInput.addEventListener("change", () => {
 });
 currentBooksHolder.addEventListener("click", editCurrentBook);
 form.addEventListener("click", addNewBook);
-formOpenBtn.addEventListener("click", openModalForm);
+formOpenBtn.addEventListener("click", () => {
+  openModalForm();
+  formHeader.innerText = "Add New Book to your shelf!";
+});
+
 formCloseBtn.addEventListener("click", closeModalForm);
 document.body.addEventListener("click", deleteOrEdit);
 
